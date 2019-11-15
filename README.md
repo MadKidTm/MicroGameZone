@@ -42,3 +42,18 @@ D'un point de vue technique, nous proposons d'intégrer des technologies éprouv
 
 
 ## Livrables
+Pour faciliter la mise en production, nous proposerons une machine "clefs en main" avec l'ensemble des composants déjà installés.
+
+Lors des mises à jours, l'administrateur du système devra suivre la procédure suivante :
+- Stopper les services 
+```
+docker-compose down
+```
+- Télécharger les mises à jours
+```
+git pull
+```
+- Redémarrer les services
+```
+docker-compose up
+```
