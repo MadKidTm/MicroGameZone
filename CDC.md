@@ -16,10 +16,10 @@ Le CEO de MicroGameZone souhaite donc passer sur un modèle de vente exclusiveme
 ## Besoin
 Les besoins principaux de MicroGameZone sont:
 
-- Pouvoir présenter une liste des jeux vidéo disponibles à la vente au client
-- Pouvoir effectuer une commande de un ou plusieurs jeux vidéo
-- Pouvoir permettre au client d'acceder a son espace a partir duquel il peut consulter son activité sur le site
-- Pouvoir gérer le stock des jeux disponibles à la vente
+- Pouvoir présenter une liste des jeux vidéo disponibles à la vente au client.
+- Pouvoir effectuer une commande de un ou plusieurs jeux vidéo.
+- Pouvoir permettre au client d'acceder a son espace a partir duquel il peut consulter son activité sur le site.
+- Pouvoir gérer le stock des jeux disponibles à la vente.
 
 
 ## Solution
@@ -27,14 +27,14 @@ Pour répondre à ce besoin, notre société a la solution ! Fort de 2 mois d'ex
 
 ### Solution fonctionelles
   Les fonctionnalités offertes par l'application:
-  - Système de gestion des jeux disponibles à la vente
-  - Gestion des achats
-  - Espace client : pouvoir s'enregistrer, se connecter, modifier ses informations personnelles, visualiser son historique des achats, consulter son panier
-  - Système de gestion de stock
+  - Système de gestion des jeux disponibles à la vente.
+  - Gestion des achats.
+  - Espace client : pouvoir s'enregistrer, se connecter, modifier ses informations personnelles, visualiser son historique des achats, consulter son panier.
+  - Système de gestion de stock.
   
 ### Solution techniques
 D'un point de vue technique, nous proposons d'intégrer des technologies éprouvées, performantes et peu onéreuses :
-- Une base de données PostgreSQL pour la gestion et la manipulation des données. PostgreSQL est une base de données libre, sans coût de licence, et elle existe depuis plus de 20 ans
+- Une base de données PostgreSQL pour la gestion et la manipulation des données. PostgreSQL est une base de données libre, sans coût de licence, et elle existe depuis plus de 20 ans.
 - Serveur Web Apache pour la délivrance des pages Web. Apache est aujourd'hui le serveur le plus populaire et dispose de nombreux modules.
 - Angular pour le front-end avec un back-end php qui recupérera les données depuis la BDD. 
 - Docker pour le packaging de l'application dans un environnement maîtrisée et cloisonné.
