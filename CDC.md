@@ -38,7 +38,7 @@ D'un point de vue technique, nous proposons d'intégrer des technologies éprouv
 - Serveur Web Apache pour la délivrance des pages Web. Apache est aujourd'hui le serveur le plus populaire et dispose de nombreux modules.
 - Angular pour le front-end avec un back-end php qui recupérera les données depuis la BDD. 
 - Docker pour le packaging de l'application dans un environnement maîtrisée et cloisonné.
-
+Le prérequis technique pour la mise en service de la solution est de disposer d'une machine Windows Professionnal disposant du logiciel Docker. 
 
 ## Livrables
 Pour faciliter la mise en production, nous proposerons une machine "clefs en main" avec l'ensemble des composants déjà installés.
