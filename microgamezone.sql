@@ -11,6 +11,8 @@ DROP TABLE IF EXISTS STOCK CASCADE;
 DROP TABLE IF EXISTS GENRE_JEU CASCADE;
 
 
+
+
 CREATE OR REPLACE PROCEDURAL LANGUAGE plpgsql;
 
 CREATE TABLE PLATEFORME (
@@ -36,19 +38,19 @@ CREATE TABLE CLIENT (
 );
 
 CREATE TABLE EDITEUR (
-    id INTEGER NOT NULL,
+    id SERIAL NOT NULL ,
     nom VARCHAR NOT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE DEVELOPPEUR (
-    id INTEGER NOT NULL,
+    id SERIAL NOT NULL ,
     nom VARCHAR NOT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE JEU (
-    id INTEGER NOT NULL,
+    id SERIAL NOT NULL  ,
     prix FLOAT NOT NULL,
     description VARCHAR,
     image VARCHAR NOT NULL,
@@ -61,7 +63,7 @@ CREATE TABLE JEU (
 );
 
 CREATE TABLE AVIS (
-    id INTEGER NOT NULL,
+    id SERIAL NOT NULL,
     texte VARCHAR,
     note INTEGER NOT NULL,
     id_jeu INTEGER NOT NULL,
@@ -102,3 +104,41 @@ CREATE TABLE GENRE_JEU (
     FOREIGN KEY (id_jeu) REFERENCES jeu(id),
     FOREIGN KEY (libelle_genre) REFERENCES genre(libelle)
 );
+
+
+-- DUMMY DATA --
+
+INSERT INTO DEVELOPPEUR (nom) 
+VALUES 
+    ('Rockstar Games'),
+    ('Ubisoft Montreal'),
+    ('BioWare'),
+    ('DICE');
+
+
+INSERT INTO PLATEFORME (nom_plateforme, date_de_sortie)
+    VALUES
+    ('PS4', '2013-11-15'),
+    ('XBOX ONE', '2013-11-22'),
+    ('PC', NULL);
+
+INSERT INTO EDITEUR (nom)
+    VALUES
+    ('Take Two'),
+    ('Ubisoft'),
+    ('Electronic Arts');
+
+INSERT INTO GENRE (libelle)
+    VALUES
+    ('Action'),
+    ('Plateforme'),
+    ('RPG'),
+    ('FPS'),
+    ('Aventure'),
+    ('TPS');
+
+INSERT INTO JEU (titre, prix, description, image, id_editeur, id_developpeur)
+    VALUES
+    ('Red Dead Redemption 2', 60, 'jeu de ouf', 'dummy/link.jpg', 1, 1),
+    ('Battlefield 5', 70, 'piou piou piou', 'dummy/link.jpg', 3, 4),
+    ('Assasins Creed Black Odysee', 60, 'grimpe grimpe grimpe', 'dummy/link.jpg', 2, 2);
