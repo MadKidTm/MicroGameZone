@@ -29,7 +29,7 @@ Pour répondre à ce besoin, notre société a la solution ! Fort de 2 mois d'ex
   Les fonctionnalités offertes par l'application:
   - Système de gestion des jeux disponibles à la vente.
   - Gestion des achats.
-  - Espace client : pouvoir s'enregistrer, se connecter, modifier ses informations personnelles, visualiser son historique des achats, consulter son panier.
+  - Espace client : pouvoir s'enregistrer, se connecter, modifier ses informations personnelles, visualiser son historique des achats, consulter son panier pour la session courante.
   - Système de gestion de stock.
   
 ### Solution techniques
