@@ -16,8 +16,8 @@ Le CEO de MicroGameZone souhaite donc passer sur un modèle de vente exclusiveme
 ## Besoin
 Les besoins principaux de MicroGameZone sont:
 
-- Pouvoir présenter une liste des jeux video disponibles à la vente au client
-- Pouvoir effectuer une commande
+- Pouvoir présenter une liste des jeux vidéo disponibles à la vente au client
+- Pouvoir effectuer une commande de un ou plusieurs jeux vidéo
 - Pouvoir permettre au client d'acceder a son espace a partir duquel il peut consulter son activité sur le site
 - Pouvoir gérer le stock des jeux disponibles à la vente
 
@@ -29,7 +29,7 @@ Pour répondre à ce besoin, notre société a la solution ! Fort de 2 mois d'ex
   Les fonctionnalités offertes par l'application:
   - Système de gestion des jeux disponibles à la vente
   - Gestion des achats
-  - Espace client
+  - Espace client : pouvoir s'enregistrer, se connecter, modifier ses informations personnelles, visualiser son historique des achats, consulter son panier
   - Système de gestion de stock
   
 ### Solution techniques
