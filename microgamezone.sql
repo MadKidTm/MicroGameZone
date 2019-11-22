@@ -117,6 +117,43 @@ CREATE TABLE GENRE_JEU (
     FOREIGN KEY (libelle_genre) REFERENCES genre(libelle)
 );
 
+-----------------------------------------------------------------------------
+-- Triggers and their functions.
+-----------------------------------------------------------------------------
+
+-- TRIGGER --
+CREATE TRIGGER check_date_trigger
+BEFORE INSERT ON commande
+FOR EACH ROW
+EXECUTE FUNCTION test_date();
+
+-- FUNCTION --
+
+CREATE OR REPLACE FUNCTION test_date()
+RETURNS trigger AS $$
+BEGIN
+    IF (func_check_date(NEW.date_commande)) THEN
+        RETURN NEW;
+    ELSE
+        RAISE EXCEPTION 'date incorrecte';
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION func_check_date(date_commande date)
+RETURNS bool AS $$
+BEGIN
+RETURN EXISTS
+(SELECT ok FROM
+(SELECT (date_commande > now()) as ok
+) as t1
+where ok = true
+);
+END
+$$ 
+LANGUAGE plpgsql;
 
 -----------------------------------------------------------------------------
 -- Insert some data.
@@ -206,7 +243,7 @@ INSERT INTO AVIS (texte, note, id_jeu, email_client)
 	
 INSERT INTO COMMANDE (date_commande, email_client) 
 	VALUES 
-	('2013-11-15', 'gzelinsky@gmail.com'),
+	('2019-12-30', 'gzelinsky@gmail.com'),
 	('2019-12-28', 'futuregoat@gmail.com'),
 	('2019-12-27', 'gzelinsky@gmail.com'),
 	('2019-12-28', 'joejohn@gmail.com'),
@@ -230,7 +267,7 @@ INSERT INTO VENTE (id_jeu, num_commande, qte)
 	(1, 9, 2);
 	
 -----------------------------------------------------------------------------
--- Functions and triggers.
+-- Functions.
 -----------------------------------------------------------------------------	
 
 -- Obtenir les jeux ordonnés par nombre de ventes
