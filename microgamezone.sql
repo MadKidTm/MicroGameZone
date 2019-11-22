@@ -117,39 +117,6 @@ CREATE TABLE GENRE_JEU (
     FOREIGN KEY (libelle_genre) REFERENCES genre(libelle)
 );
 
--- TRIGGER --
-CREATE TRIGGER check_date_trigger
-BEFORE INSERT ON commande
-FOR EACH ROW
-EXECUTE FUNCTION test_date()
-
--- FUNCTION --
-
-CREATE OR REPLACE FUNCTION test_date()
-RETURNS trigger AS $$
-BEGIN
-    IF (func_check_date(NEW.date_commande)) THEN
-        RETURN NEW
-    ELSE
-        RAISE_EXCEPTION 'date incorrecte';
-    END IF;
-END
-$$
-LANGUAGE plpgsql;
-
-
-CREATE OR REPLACE FUNCTION func_check_date(date_commande date)
-RETURNS bool AS $$
-BEGIN
-RETURN EXISTS
-(SELECT ok FROM
-(SELECT (date_commande > now()) as ok
-) as t1
-where ok = true
-);
-END
-$$ 
-LANGUAGE plpgsql;
 
 -----------------------------------------------------------------------------
 -- Insert some data.
@@ -232,10 +199,10 @@ INSERT INTO AVIS (texte, note, id_jeu, email_client)
 	('Its good.', 70, 2, 'thebeard@hotmail.com'),
 	('Its great.', 90, 2, 'joejohn@gmail.com'),
 	('It sucks.', 23, 2, 'robthebot@gmail.com'),
-	('I just love it.', 95, 2, 'gzelinsky@gmail.com'),
-	('Fedex sim.', 40, 2, 'thebeard@hotmail.com'),
-	('Cool game.', 80, 2, 'joejohn@gmail.com'),
-	('One of the best of the franchise.', 88, 2, 'robthebot@gmail.com');
+	('I just love it.', 95, 3, 'gzelinsky@gmail.com'),
+	('Fedex sim.', 40, 3, 'thebeard@hotmail.com'),
+	('Cool game.', 80, 3, 'joejohn@gmail.com'),
+	('One of the best of the franchise.', 88, 3, 'robthebot@gmail.com');
 	
 INSERT INTO COMMANDE (date_commande, email_client) 
 	VALUES 
@@ -265,3 +232,90 @@ INSERT INTO VENTE (id_jeu, num_commande, qte)
 -----------------------------------------------------------------------------
 -- Functions and triggers.
 -----------------------------------------------------------------------------	
+
+-- Obtenir les jeux ordonnés par nombre de ventes
+DROP FUNCTION IF EXISTS get_games_ordered_by_sales();
+CREATE OR REPLACE FUNCTION get_games_ordered_by_sales()
+returns table (titre varchar, ventes bigint) 
+AS 
+$$		
+	BEGIN RETURN QUERY
+		SELECT jeu.titre, sum(qte)
+		FROM jeu INNER JOIN vente 
+		ON jeu.id = vente.id_jeu
+		GROUP BY jeu.titre
+		ORDER BY sum(qte) DESC;
+	END
+$$ LANGUAGE plpgsql;
+
+-- Obtenir tous les jeux d’un éditeur
+DROP FUNCTION IF EXISTS get_games_by_editor();
+CREATE OR REPLACE FUNCTION get_games_by_editor(editor varchar)
+returns table (editeur varchar, jeu varchar) 
+AS 
+$$		
+	BEGIN RETURN QUERY
+		SELECT editeur.nom, jeu.titre
+		FROM jeu INNER JOIN editeur
+		ON jeu.id_editeur = editeur.id
+		WHERE editeur.nom = editor;
+	END
+$$ LANGUAGE plpgsql;
+
+-- Obtenir le genre le plus répandu
+DROP FUNCTION IF EXISTS get_most_popular_genre();
+CREATE OR REPLACE FUNCTION get_most_popular_genre()
+returns table (genre varchar, nb_jeux bigint) 
+AS 
+$$		
+	BEGIN RETURN QUERY
+		SELECT libelle_genre, count(id_jeu)
+		FROM genre_jeu
+		GROUP BY libelle_genre
+		HAVING count(id_jeu) = (
+			SELECT max(t.nbJeux)
+			FROM (SELECT libelle_genre, count(id_jeu) as nbJeux 
+				  FROM genre_jeu 
+				  GROUP BY libelle_genre) 
+		t);
+	END
+$$ LANGUAGE plpgsql;
+
+-- Obtenir une liste de jeux classés par leur note (voir les jeux les mieux notés)
+DROP FUNCTION IF EXISTS get_games_by_rating();
+CREATE OR REPLACE FUNCTION get_games_by_rating()
+returns table (jeu varchar, average_rating numeric) 
+AS 
+$$		
+	BEGIN RETURN QUERY
+		SELECT titre, avg(avis.note) as avgNotes
+		FROM avis INNER JOIN jeu
+		ON avis.id_jeu = jeu.id
+		GROUP BY titre
+		ORDER BY avgNotes DESC;
+	END
+$$ LANGUAGE plpgsql;
+
+-- Obtenir le jeu le mieux noté d’un éditeur
+DROP FUNCTION IF EXISTS get_best_game_of_editor();
+CREATE OR REPLACE FUNCTION get_best_game_of_editor(editor varchar)
+returns table (jeu varchar, average_rating numeric) 
+AS 
+$$		
+	BEGIN RETURN QUERY
+		SELECT titre, avg(avis.note)
+		FROM jeu INNER JOIN avis
+		ON jeu.id = avis.id_jeu
+		GROUP BY titre
+		HAVING avg(avis.note) = (SELECT max(avgNotes) 
+								 FROM (SELECT titre, avg(avis.note) as avgNotes
+									   FROM avis INNER JOIN jeu
+									   ON avis.id_jeu = jeu.id	
+									   INNER JOIN editeur
+									   ON jeu.id_editeur = editeur.id
+									   WHERE editeur.nom = editor 
+									   GROUP BY titre
+									   ORDER BY avgNotes DESC) 
+		t);
+	END
+$$ LANGUAGE plpgsql;
