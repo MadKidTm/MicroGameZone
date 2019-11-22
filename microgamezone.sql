@@ -117,6 +117,39 @@ CREATE TABLE GENRE_JEU (
     FOREIGN KEY (libelle_genre) REFERENCES genre(libelle)
 );
 
+-- TRIGGER --
+CREATE TRIGGER check_date_trigger
+BEFORE INSERT ON commande
+FOR EACH ROW
+EXECUTE FUNCTION test_date()
+
+-- FUNCTION --
+
+CREATE OR REPLACE FUNCTION test_date()
+RETURNS trigger AS $$
+BEGIN
+    IF (func_check_date(NEW.date_commande)) THEN
+        RETURN NEW
+    ELSE
+        RAISE_EXCEPTION 'date incorrecte';
+    END IF;
+END
+$$
+LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION func_check_date(date_commande date)
+RETURNS bool AS $$
+BEGIN
+RETURN EXISTS
+(SELECT ok FROM
+(SELECT (date_commande > now()) as ok
+) as t1
+where ok = true
+);
+END
+$$ 
+LANGUAGE plpgsql;
 
 -----------------------------------------------------------------------------
 -- Insert some data.
