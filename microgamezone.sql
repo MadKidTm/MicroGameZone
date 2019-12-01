@@ -65,8 +65,8 @@ CREATE TABLE JEU (
     description VARCHAR,
     image VARCHAR NOT NULL,
     titre VARCHAR NOT NULL,
-    id_editeur INTEGER NOT NULL,
-    id_developpeur INTEGER NOT NULL,
+    id_editeur INTEGER,
+    id_developpeur INTEGER,
     PRIMARY KEY (id),
     FOREIGN KEY(id_editeur) REFERENCES editeur(id),
     FOREIGN KEY(id_developpeur) REFERENCES developpeur(id)
@@ -121,11 +121,7 @@ CREATE TABLE GENRE_JEU (
 -- Triggers and their functions.
 -----------------------------------------------------------------------------
 
--- TRIGGER --
-CREATE TRIGGER check_date_trigger
-BEFORE INSERT ON commande
-FOR EACH ROW
-EXECUTE FUNCTION test_date();
+
 
 -- FUNCTION --
 
@@ -155,6 +151,11 @@ END
 $$ 
 LANGUAGE plpgsql;
 
+-- TRIGGER --
+CREATE TRIGGER check_date_trigger
+BEFORE INSERT ON commande
+FOR EACH ROW EXECUTE PROCEDURE test_date();
+
 -----------------------------------------------------------------------------
 -- Insert some data.
 -----------------------------------------------------------------------------
@@ -163,7 +164,8 @@ VALUES
     ('Rockstar Games'),
     ('Ubisoft Montreal'),
     ('BioWare'),
-    ('DICE');
+    ('DICE'),
+	('Kojima Productions');
 
 
 INSERT INTO PLATEFORME (nom_plateforme, date_de_sortie)
@@ -176,7 +178,9 @@ INSERT INTO EDITEUR (nom)
     VALUES
     ('Take Two'),
     ('Ubisoft'),
-    ('Electronic Arts');
+    ('Electronic Arts'),
+	('Sony');
+	
 
 INSERT INTO GENRE (libelle)
     VALUES
@@ -189,9 +193,11 @@ INSERT INTO GENRE (libelle)
 
 INSERT INTO JEU (titre, prix, description, image, id_editeur, id_developpeur)
     VALUES
-    ('Red Dead Redemption 2', 60, 'jeu de ouf', 'dummy/link.jpg', 1, 1),
-    ('Battlefield 5', 70, 'piou piou piou', 'dummy/link.jpg', 3, 4),
-    ('Assasins Creed Black Odyssey', 60, 'grimpe grimpe grimpe', 'dummy/link.jpg', 2, 2);
+    ('Red Dead Redemption 2', 60, 'jeu de ouf', 'https://www.erenumerique.fr/wp-content/uploads/2018/11/la-prochaine-bande-annonce-de-red-dead-redemption-2-arrive-le-2-mai-88fb1861.jpg', 1, 1),
+    ('Battlefield 5', 70, 'piou piou piou', 'http://image.jeuxvideo.com/medias-md/154324/1543238267-4428-card.jpg', 3, 4),
+    ('Assasins Creed Black Odyssey', 60, 'grimpe grimpe grimpe', 'https://wp_www.konbini.com/fr/files/2018/12/acfeat-2.jpg', 2, 2),
+	('Death Stranding', 70, 'Walking Simulator', 'https://cdn-europe1.lanmedia.fr/var/europe1/storage/images/europe1/culture/death-stranding-objet-videoludique-non-identifie-mais-fascinant-3932516/53764821-1-fre-FR/Death-Stranding-objet-videoludique-non-identifie-mais-fascinant.jpg', 4, 5);
+	
 	
 INSERT INTO STOCK (nom_plateforme, id_jeu, qte) 
 	VALUES 
